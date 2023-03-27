@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { changeItem } from '../utils/secondsData'
 export default {
   name: 'StopwatchItem',
@@ -26,16 +26,23 @@ export default {
     let interval
     let isActive = ref(false)
     let seconds  = ref(props.seconds)
+    
+    watch(() => props.seconds, (newSeconds) => {
+      seconds.value = newSeconds
+    })
+
     const time = computed(() => {
       const hours = Math.floor(seconds.value / 3600)
       const minutes = Math.floor((seconds.value % 3600) / 60)
-      const second = Math.floor(
+      let second = Math.floor(
         (seconds.value - (hours * 360 + minutes * 60)) % 60
       );
+
       if (hours === 0 && minutes === 0) return `${second}`
       else if (hours === 0) return `${minutes}:${second}`
       else return `${hours}:${minutes}:${second} `
     })
+
     const start = () => {
       interval = setInterval(() => {
         seconds.value++;

@@ -3,6 +3,8 @@
     <div class="container">
     <div class="item" v-for="(seconds, index) in items" :key="index">
         <StopwatchItem :index="index" :seconds="seconds"/>
+        <img class="btnRemove" src="./assets/icons/delete.svg"  @click="remove(index)" alt="">
+
     </div>
     <button class="btnAdd" @click="addItem">+</button>
   </div>
@@ -28,11 +30,18 @@ export default {
 
     }
     const items = computed(() =>{
+      console.log(secondsArr.value)
+
       return secondsArr.value
     })
+    const remove = (index) =>{
+      deleteItem(index)
+      secondsArr.value = secondsArr.value.filter((i, indx)=> indx !== index)
+    }
     return {
       addItem,
       items,
+      remove
     }
   },
 }
@@ -77,6 +86,13 @@ html, body {
   font-size: 46px;
   border: none;
   cursor: pointer;
+}
+.btnRemove{
+  position: absolute;
+  top: 5%;
+  right: 5%;;
+  cursor: pointer;
+
 }
 @media (max-width: 1024px) {
   .container{
